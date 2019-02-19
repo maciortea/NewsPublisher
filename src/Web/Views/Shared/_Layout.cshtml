@@ -33,6 +33,12 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="GetMyArticles">My articles</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="PublishArticle">Publish article</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="News" asp-action="Privacy">Privacy</a>
                         </li>
                     </ul>
@@ -49,12 +55,14 @@
 
     <footer class="border-top footer text-muted">
         <div class="container">
-            &copy; 2019 - Web - <a asp-area="" asp-controller="News" asp-action="Privacy">Privacy</a>
+            &copy; 2019 - News publisher - <a asp-area="" asp-controller="News" asp-action="Privacy">Privacy</a>
         </div>
     </footer>
 
     <environment include="Development">
         <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+        <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.js"></script>
         <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.js"></script>
     </environment>
     <environment exclude="Development">

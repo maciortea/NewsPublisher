@@ -53,7 +53,7 @@ namespace Web.Controllers
         [HttpGet]
         public IActionResult GetMyArticles()
         {
-            throw new NotImplementedException();
+            return View("MyArticles", new List<ArticleViewModel>());
         }
 
         [Authorize(Policy = "RequireUserRole")]
