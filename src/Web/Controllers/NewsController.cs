@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Web.Models;
 
@@ -11,9 +12,27 @@ namespace Web.Controllers
 {
     public class NewsController : Controller
     {
-        public IActionResult Index()
+        private readonly UserManager<IdentityUser> _userManager;
+        private readonly INewsRepository _newsRepository;
+
+        public NewsController(UserManager<IdentityUser> userManager, INewsRepository newsRepository)
         {
-            return View();
+            _userManager = userManager;
+            _newsRepository = newsRepository;
+        }
+
+        [Authorize(Policy = "RequirePublisherOrUser")]
+        [HttpGet]
+        public async Task<IActionResult> GetAllArticles()
+        {
+            var articles = await _newsRepository.GetAllAsync();
+            var model = articles.Select(a => new ArticleViewModel
+            {
+                Id = a.Id,
+                Title = a.Title
+            }).ToList();
+
+            return View("ArticleList", model);
         }
 
         public IActionResult Privacy()
@@ -51,16 +70,17 @@ namespace Web.Controllers
 
         [Authorize(Policy = "RequirePublisherRole")]
         [HttpGet]
-        public IActionResult GetMyArticles()
+        public async Task<IActionResult> GetMyArticles()
         {
-            return View("MyArticles", new List<ArticleViewModel>());
-        }
+            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var articles = await _newsRepository.GetAllByAuthorIdAsync(user.Id);
+            var model = articles.Select(a => new ArticleViewModel
+            {
+                Id = a.Id,
+                Title = a.Title
+            }).ToList();
 
-        [Authorize(Policy = "RequireUserRole")]
-        [HttpGet]
-        public IActionResult GetAllArticles()
-        {
-            throw new NotImplementedException();
+            return View("ArticleList", model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

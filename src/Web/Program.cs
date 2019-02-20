@@ -21,10 +21,10 @@ namespace Web
 
                 try
                 {
-                    //var db = services.GetRequiredService<ApplicationDbContext>();
+                    var db = services.GetRequiredService<ApplicationDbContext>();
                     var userManager = services.GetRequiredService<UserManager<IdentityUser>>();
                     var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
-                    ApplicationDbContextSeed.SeedAsync(userManager, roleManager).Wait();
+                    ApplicationDbContextSeed.SeedAsync(db, userManager, roleManager).Wait();
                 }
                 catch (Exception ex)
                 {

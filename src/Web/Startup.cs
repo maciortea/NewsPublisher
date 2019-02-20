@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Infrastructure;
+using Infrastructure.Repositories;
+using ApplicationCore.Interfaces;
 
 namespace Web
 {
@@ -37,12 +39,16 @@ namespace Web
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+            services.AddScoped<INewsRepository, NewsRepository>();
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequirePublisherRole", policy => policy.RequireRole("Publisher"));
                 options.AddPolicy("RequireUserRole", policy => policy.RequireRole("User"));
+                options.AddPolicy("RequirePublisherOrUser", policy =>
+                    policy.RequireAssertion(context => context.User.IsInRole("Publisher") || context.User.IsInRole("User")));
             });
         }
 
@@ -71,7 +77,7 @@ namespace Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=News}/{action=Index}/{id?}");
+                    template: "{controller=News}/{action=GetAllArticles}/{id?}");
             });
         }
     }

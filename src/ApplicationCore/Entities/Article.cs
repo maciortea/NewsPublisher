@@ -11,7 +11,11 @@ namespace ApplicationCore.Entities
         public DateTime PublishDate { get; private set; }
         public string AuthorId { get; private set; }
 
-        private Article(string title, string body, string authorId)
+        private Article()
+        {
+        }
+
+        public Article(string title, string body, string authorId)
         {
             Contract.Require(!string.IsNullOrWhiteSpace(title), "Title is required.");
             Contract.Require(!string.IsNullOrWhiteSpace(body), "Body is required.");
