@@ -1,0 +1,23 @@
+﻿@model Web.Models.ArticleDetailsViewModel
+
+@{
+    ViewData["Title"] = "Article";
+}
+
+<h3>@Model.Title</h3>
+
+<div>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayFor(model => model.Author)
+            @Html.DisplayFor(model => model.PublishDate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Body)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Articles">Back to articles</a>
+</div>

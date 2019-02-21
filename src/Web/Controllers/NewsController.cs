@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using ApplicationCore.Entities;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -23,7 +24,7 @@ namespace Web.Controllers
 
         [Authorize(Policy = "RequirePublisherOrUser")]
         [HttpGet]
-        public async Task<IActionResult> GetAllArticles()
+        public async Task<IActionResult> Articles()
         {
             var articles = await _newsRepository.GetAllAsync();
             var model = articles.Select(a => new ArticleViewModel
@@ -33,6 +34,23 @@ namespace Web.Controllers
             }).ToList();
 
             return View("ArticleList", model);
+        }
+
+        [Authorize(Policy = "RequirePublisherOrUser")]
+        [HttpGet]
+        public async Task<IActionResult> Article(int id)
+        {
+            Article article = await _newsRepository.GetByIdAsync(id);
+            IdentityUser author = await _userManager.FindByIdAsync(article.AuthorId);
+            var model = new ArticleDetailsViewModel
+            {
+                Title = article.Title,
+                Body = article.Body,
+                PublishDate = article.PublishDate,
+                Author = author.UserName
+            };
+
+            return View(model);
         }
 
         public IActionResult Privacy()
@@ -49,9 +67,19 @@ namespace Web.Controllers
 
         [Authorize(Policy = "RequirePublisherRole")]
         [HttpPost]
-        public IActionResult PublishArticle(ArticleEditViewModel model)
+        public async Task<IActionResult> PublishArticle(ArticleEditViewModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            IdentityUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var article = new Article(model.Title, model.Body, user.Id);
+
+            await _newsRepository.AddAsync(article);
+
+            return RedirectToAction("GetMyArticles");
         }
 
         [Authorize(Policy = "RequirePublisherRole")]
@@ -72,7 +100,7 @@ namespace Web.Controllers
         [HttpGet]
         public async Task<IActionResult> GetMyArticles()
         {
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            IdentityUser user = await _userManager.FindByNameAsync(User.Identity.Name);
             var articles = await _newsRepository.GetAllByAuthorIdAsync(user.Id);
             var model = articles.Select(a => new ArticleViewModel
             {
@@ -80,7 +108,7 @@ namespace Web.Controllers
                 Title = a.Title
             }).ToList();
 
-            return View("ArticleList", model);
+            return View("MyArticles", model);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

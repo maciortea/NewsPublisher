@@ -23,5 +23,16 @@ namespace Infrastructure.Repositories
         {
             return await _db.Articles.Where(a => a.AuthorId == authorId).OrderByDescending(a => a.PublishDate).ToListAsync();
         }
+
+        public async Task AddAsync(Article article)
+        {
+            await _db.Articles.AddAsync(article);
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task<Article> GetByIdAsync(int id)
+        {
+            return await _db.Articles.FindAsync(id);
+        }
     }
 }

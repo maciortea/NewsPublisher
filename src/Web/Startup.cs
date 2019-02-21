@@ -77,7 +77,7 @@ namespace Web
             {
                 routes.MapRoute(
                     name: "default",
-                    template: "{controller=News}/{action=GetAllArticles}/{id?}");
+                    template: "{controller=News}/{action=Articles}/{id?}");
             });
         }
     }

@@ -1,0 +1,25 @@
+﻿@model IEnumerable<Web.Models.ArticleViewModel>
+
+@{
+    ViewData["Title"] = "My articles";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<table class="table">
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    <button type="button" class="btn btn-link">
+                        <p class="h5">@Html.DisplayFor(modelItem => item.Title)</p>
+                    </button>
+                </td>
+                <td>
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
