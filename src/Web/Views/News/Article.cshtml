@@ -4,20 +4,33 @@
     ViewData["Title"] = "Article";
 }
 
-<h3>@Model.Title</h3>
-
-<div>
-    <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayFor(model => model.Author)
-            @Html.DisplayFor(model => model.PublishDate)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Body)
-        </dd>
-    </dl>
+<div class="row">
+    <div class="col-md-12">
+        <h3>@Model.Title</h3>
+        <p class="article-author">@Model.PublishDate.ToString("MMMM dd, yyyy") by <a href="#">@Model.Author</a></p>
+        <p>@Model.Body</p>
+        <p>
+            <a id="Like" href="#"><i class="material-icons md-35 md-inactive">thumb_up_alt</i></a>
+            <a href="#"><i class="material-icons md-35 md-inactive">question_answer</i></a>
+        </p>
+    </div>
 </div>
 <div>
     <a asp-action="Articles">Back to articles</a>
 </div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#Like').click(function (e) {
+                e.preventDefault();
+                var icon = $(this).find('i');
+                if (icon.hasClass('md-inactive')) {
+                    icon.removeClass('md-inactive').addClass('md-active');
+                } else {
+                    icon.removeClass('md-active').addClass('md-inactive');
+                }
+            });
+        });
+    </script>
+}

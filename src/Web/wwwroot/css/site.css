@@ -54,3 +54,31 @@ body {
   height: 60px;
   line-height: 60px; /* Vertically center the text there */
 }
+
+a {
+    color: #007bff;
+    text-decoration: none;
+    background-color: transparent;
+}
+
+.article-author {
+    margin-bottom: 1.25rem;
+    color: #999;
+}
+
+.material-icons {
+    display: inline-flex;
+    vertical-align: top;
+}
+
+.material-icons.md-35 {
+    font-size: 35px;
+}
+
+.material-icons.md-active {
+    color: #323e77;
+}
+
+.material-icons.md-inactive {
+    color: #c0c4d6;
+}
