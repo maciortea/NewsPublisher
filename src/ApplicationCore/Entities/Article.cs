@@ -26,5 +26,14 @@ namespace ApplicationCore.Entities
             PublishDate = DateTime.Now;
             AuthorId = authorId;
         }
+
+        public void Edit(string title, string body)
+        {
+            Contract.Require(!string.IsNullOrWhiteSpace(title), "Title is required.");
+            Contract.Require(!string.IsNullOrWhiteSpace(body), "Body is required.");
+
+            Title = title;
+            Body = body;
+        }
     }
 }

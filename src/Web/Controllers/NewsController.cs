@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities;
@@ -83,17 +82,46 @@ namespace Web.Controllers
         }
 
         [Authorize(Policy = "RequirePublisherRole")]
-        [HttpPut]
-        public IActionResult EditArticle(ArticleEditViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> EditArticle(int id)
         {
-            throw new NotImplementedException();
+            Article article = await _newsRepository.GetByIdAsync(id);
+            var model = new ArticleEditViewModel
+            {
+                Id = article.Id,
+                Title = article.Title,
+                Body = article.Body
+            };
+
+            return View(model);
         }
 
         [Authorize(Policy = "RequirePublisherRole")]
-        [HttpDelete]
-        public IActionResult DeleteArticle(long id)
+        [HttpPost]
+        public async Task<IActionResult> EditArticle(ArticleEditViewModel model)
         {
-            throw new NotImplementedException();
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            Article article = await _newsRepository.GetByIdAsync(model.Id);
+            article.Edit(model.Title, model.Body);
+
+            await _newsRepository.UpdateAsync(article);
+
+            return RedirectToAction("GetMyArticles");
+        }
+
+        [Authorize(Policy = "RequirePublisherRole")]
+        [HttpGet]
+        public async Task<IActionResult> DeleteArticle(int id)
+        {
+            Article article = await _newsRepository.GetByIdAsync(id);
+
+            await _newsRepository.DeleteAsync(article);
+
+            return RedirectToAction("GetMyArticles");
         }
 
         [Authorize(Policy = "RequirePublisherRole")]

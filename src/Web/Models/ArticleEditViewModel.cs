@@ -5,6 +5,8 @@ namespace Web.Models
 {
     public class ArticleEditViewModel
     {
+        public int Id { get; set; }
+
         [Required]
         [DisplayName("Title")]
         public string Title { get; set; }

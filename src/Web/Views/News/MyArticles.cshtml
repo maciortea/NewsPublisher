@@ -12,12 +12,10 @@
         {
             <tr>
                 <td>
-                    <button type="button" class="btn btn-link">
-                        <p class="h5">@Html.DisplayFor(modelItem => item.Title)</p>
-                    </button>
+                    @Html.ActionLink(item.Title, "EditArticle", new { id = item.Id }, new { @class = "h5 btn-link" })
                 </td>
                 <td>
-                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    @Html.ActionLink("Delete", "DeleteArticle", new { id = item.Id })
                 </td>
             </tr>
         }

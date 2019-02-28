@@ -8,7 +8,9 @@ namespace ApplicationCore.Interfaces
     {
         Task<IReadOnlyList<Article>> GetAllAsync();
         Task<IReadOnlyList<Article>> GetAllByAuthorIdAsync(string authorId);
-        Task AddAsync(Article article);
         Task<Article> GetByIdAsync(int id);
+        Task AddAsync(Article article);
+        Task UpdateAsync(Article article);
+        Task DeleteAsync(Article article);
     }
 }

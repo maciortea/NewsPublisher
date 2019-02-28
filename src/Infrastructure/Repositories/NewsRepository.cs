@@ -24,15 +24,27 @@ namespace Infrastructure.Repositories
             return await _db.Articles.Where(a => a.AuthorId == authorId).OrderByDescending(a => a.PublishDate).ToListAsync();
         }
 
+        public async Task<Article> GetByIdAsync(int id)
+        {
+            return await _db.Articles.FindAsync(id);
+        }
+
         public async Task AddAsync(Article article)
         {
             await _db.Articles.AddAsync(article);
             await _db.SaveChangesAsync();
         }
 
-        public async Task<Article> GetByIdAsync(int id)
+        public async Task UpdateAsync(Article article)
         {
-            return await _db.Articles.FindAsync(id);
+            _db.Entry(article).State = EntityState.Modified;
+            await _db.SaveChangesAsync();
+        }
+
+        public async Task DeleteAsync(Article article)
+        {
+            _db.Articles.Remove(article);
+            await _db.SaveChangesAsync();
         }
     }
 }
