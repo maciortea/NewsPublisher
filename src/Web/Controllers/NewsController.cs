@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using ApplicationCore.Entities;
+using ApplicationCore.Entities.ArticleAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -41,12 +41,17 @@ namespace Web.Controllers
         {
             Article article = await _newsRepository.GetByIdAsync(id);
             IdentityUser author = await _userManager.FindByIdAsync(article.AuthorId);
+            IdentityUser loggedUser = await _userManager.FindByNameAsync(User.Identity.Name);
+
             var model = new ArticleDetailsViewModel
             {
+                Id = article.Id,
                 Title = article.Title,
                 Body = article.Body,
                 PublishDate = article.PublishDate,
-                Author = author.UserName
+                Author = author.UserName,
+                LikedByMe = article.Likes.Any(l => l.UserId == loggedUser.Id),
+                LikesCount = article.Likes.Count
             };
 
             return View(model);
@@ -122,6 +127,19 @@ namespace Web.Controllers
             await _newsRepository.DeleteAsync(article);
 
             return RedirectToAction("GetMyArticles");
+        }
+
+        [Authorize(Policy = "RequirePublisherOrUser")]
+        [HttpPost]
+        public async Task<ActionResult> LikeOrDislikeArticle(int id)
+        {
+            IdentityUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            Article article = await _newsRepository.GetByIdAsync(id);
+
+            article.LikeOrDislike(user.Id);
+            await _newsRepository.UpdateAsync(article);
+
+            return Ok(article.Likes.Count);
         }
 
         [Authorize(Policy = "RequirePublisherRole")]

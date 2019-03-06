@@ -61,14 +61,21 @@ a {
     background-color: transparent;
 }
 
+a:hover {
+    text-decoration: none;
+}
+
+#LikesCount {
+    color: #c0c4d6;
+}
+
 .article-author {
     margin-bottom: 1.25rem;
     color: #999;
 }
 
 .material-icons {
-    display: inline-flex;
-    vertical-align: top;
+    vertical-align: middle;
 }
 
 .material-icons.md-35 {

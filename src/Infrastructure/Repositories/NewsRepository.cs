@@ -1,4 +1,4 @@
-﻿using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities.ArticleAggregate;
 using ApplicationCore.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Article> GetByIdAsync(int id)
         {
-            return await _db.Articles.FindAsync(id);
+            return await _db.Articles.Include(a => a.Likes).SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task AddAsync(Article article)

@@ -4,15 +4,24 @@
     ViewData["Title"] = "Article";
 }
 
+<input asp-for="Id" type="hidden" />
+
 <div class="row">
     <div class="col-md-12">
         <h3>@Model.Title</h3>
         <p class="article-author">@Model.PublishDate.ToString("MMMM dd, yyyy") by <a href="#">@Model.Author</a></p>
         <p>@Model.Body</p>
-        <p>
-            <a id="Like" href="#"><i class="material-icons md-35 md-inactive">thumb_up_alt</i></a>
-            <a href="#"><i class="material-icons md-35 md-inactive">question_answer</i></a>
-        </p>
+        <div class="row">
+            <div class="col-sm-1">
+                <a id="LikeOrDislike" href="#" class="mr-3">
+                    <i class="material-icons md-35 @(Model.LikedByMe ? "md-active" : "md-inactive")">thumb_up_alt</i>
+                    <strong><span id="LikesCount" style="@(Model.LikesCount < 1 ? "display: none;" : "")">@Model.LikesCount</span></strong>
+                </a>
+            </div>
+            <div class="col-sm-1">
+                <a href="#"><i class="material-icons md-35 md-inactive">question_answer</i></a>
+            </div>
+        </div>
     </div>
 </div>
 <div>
@@ -22,7 +31,7 @@
 @section Scripts {
     <script>
         $(document).ready(function () {
-            $('#Like').click(function (e) {
+            $('#LikeOrDislike').click(function (e) {
                 e.preventDefault();
                 var icon = $(this).find('i');
                 if (icon.hasClass('md-inactive')) {
@@ -30,6 +39,16 @@
                 } else {
                     icon.removeClass('md-active').addClass('md-inactive');
                 }
+
+                var articleId = $('#Id').val();
+
+                $.post('/News/LikeOrDislikeArticle', { id: articleId }).done(function (likesCount) {
+                    if (likesCount > 0) {
+                        $('#LikesCount').show().text(likesCount);
+                    } else {
+                        $('#LikesCount').hide();
+                    }
+                });
             });
         });
     </script>

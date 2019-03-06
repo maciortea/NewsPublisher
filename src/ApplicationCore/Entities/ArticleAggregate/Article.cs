@@ -1,8 +1,10 @@
 ﻿using ApplicationCore.Common;
 using ApplicationCore.SharedKernel;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
-namespace ApplicationCore.Entities
+namespace ApplicationCore.Entities.ArticleAggregate
 {
     public class Article : Entity
     {
@@ -10,6 +12,9 @@ namespace ApplicationCore.Entities
         public string Body { get; private set; }
         public DateTime PublishDate { get; private set; }
         public string AuthorId { get; private set; }
+
+        private readonly List<ArticleLike> _likes = new List<ArticleLike>();
+        public IReadOnlyList<ArticleLike> Likes => _likes.AsReadOnly();
 
         private Article()
         {
@@ -34,6 +39,19 @@ namespace ApplicationCore.Entities
 
             Title = title;
             Body = body;
+        }
+
+        public void LikeOrDislike(string userId)
+        {
+            ArticleLike articleLike = _likes.SingleOrDefault(al => al.UserId == userId);
+            if (articleLike != null)
+            {
+                _likes.Remove(articleLike);
+            }
+            else
+            {
+                _likes.Add(new ArticleLike(this, userId));
+            }
         }
     }
 }

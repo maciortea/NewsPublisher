@@ -1,4 +1,4 @@
-﻿using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities.ArticleAggregate;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

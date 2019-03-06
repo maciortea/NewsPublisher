@@ -1,4 +1,4 @@
-﻿using ApplicationCore.Entities;
+﻿using ApplicationCore.Entities.ArticleAggregate;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
@@ -8,11 +8,13 @@ namespace Infrastructure
     {
         public static async Task SeedAsync(ApplicationDbContext db, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager)
         {
-            string publisherUserId = await EnsureUserAsync(userManager, "publisher@test.com", "P@ssword1");
-            string userId = await EnsureUserAsync(userManager, "test@test.com", "P@ssword1");
+            string publisherUserId = await EnsureUserAsync(userManager, "publisher@domain.com", "P@ssword1");
+            string oneUserId = await EnsureUserAsync(userManager, "one@domain.com", "P@ssword1");
+            string anotherUserId = await EnsureUserAsync(userManager, "another@domain.com", "P@ssword1");
             await EnsureRoleAsync(roleManager, "User");
             await EnsureRoleAsync(roleManager, "Publisher");
-            await AssignRolesToUserAsync(userManager, userId, "User");
+            await AssignRolesToUserAsync(userManager, oneUserId, "User");
+            await AssignRolesToUserAsync(userManager, anotherUserId, "User");
             await AssignRolesToUserAsync(userManager, publisherUserId, "Publisher");
             await EnsureArticlesAsync(db, publisherUserId);
         }
