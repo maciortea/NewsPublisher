@@ -45,6 +45,7 @@ body {
   /* Margin bottom by footer height */
   margin-bottom: 60px;
 }
+
 .footer {
   position: absolute;
   bottom: 0;
@@ -63,6 +64,10 @@ a {
 
 a:hover {
     text-decoration: none;
+}
+
+p.card-text {
+    white-space: pre;
 }
 
 #LikesCount {
@@ -88,4 +93,13 @@ a:hover {
 
 .material-icons.md-inactive {
     color: #c0c4d6;
+}
+
+.card-content {
+    max-height: 629px;
+    overflow-y: scroll;
+}
+
+.card-body:last-child {
+    border-bottom: none !important;
 }

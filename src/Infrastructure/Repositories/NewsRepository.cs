@@ -26,7 +26,7 @@ namespace Infrastructure.Repositories
 
         public async Task<Article> GetByIdAsync(int id)
         {
-            return await _db.Articles.Include(a => a.Likes).SingleOrDefaultAsync(a => a.Id == id);
+            return await _db.Articles.Include(a => a.Likes).Include(a => a.Comments).SingleOrDefaultAsync(a => a.Id == id);
         }
 
         public async Task AddAsync(Article article)

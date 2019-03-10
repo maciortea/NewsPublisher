@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using ApplicationCore.Entities.ArticleAggregate;
@@ -43,6 +45,11 @@ namespace Web.Controllers
             IdentityUser author = await _userManager.FindByIdAsync(article.AuthorId);
             IdentityUser loggedUser = await _userManager.FindByNameAsync(User.Identity.Name);
 
+            List<ArticleComment> comments = article.Comments
+                .Select(c => new ArticleComment(c.Text, c.Username, c.CreatedOn))
+                .OrderBy(c => c.CreatedOn)
+                .ToList();
+
             var model = new ArticleDetailsViewModel
             {
                 Id = article.Id,
@@ -51,7 +58,8 @@ namespace Web.Controllers
                 PublishDate = article.PublishDate,
                 Author = author.UserName,
                 LikedByMe = article.Likes.Any(l => l.UserId == loggedUser.Id),
-                LikesCount = article.Likes.Count
+                LikesCount = article.Likes.Count,
+                Comments = comments
             };
 
             return View(model);
@@ -131,7 +139,7 @@ namespace Web.Controllers
 
         [Authorize(Policy = "RequirePublisherOrUser")]
         [HttpPost]
-        public async Task<ActionResult> LikeOrDislikeArticle(int id)
+        public async Task<IActionResult> LikeOrDislikeArticle(int id)
         {
             IdentityUser user = await _userManager.FindByNameAsync(User.Identity.Name);
             Article article = await _newsRepository.GetByIdAsync(id);
@@ -140,6 +148,22 @@ namespace Web.Controllers
             await _newsRepository.UpdateAsync(article);
 
             return Ok(article.Likes.Count);
+        }
+
+        [Authorize(Policy = "RequirePublisherOrUser")]
+        [HttpPost]
+        public async Task<IActionResult> Comment(int id, string text)
+        {
+            IdentityUser user = await _userManager.FindByNameAsync(User.Identity.Name);
+            Article article = await _newsRepository.GetByIdAsync(id);
+
+            article.AddComment(user.Id, User.Identity.Name, text);
+            await _newsRepository.UpdateAsync(article);
+
+            Comment addedComment = article.Comments.Last();
+            var model = new ArticleComment(addedComment.Text, addedComment.Username, addedComment.CreatedOn);
+
+            return PartialView("_Comment", model);
         }
 
         [Authorize(Policy = "RequirePublisherRole")]

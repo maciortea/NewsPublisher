@@ -16,6 +16,9 @@ namespace ApplicationCore.Entities.ArticleAggregate
         private readonly List<ArticleLike> _likes = new List<ArticleLike>();
         public IReadOnlyList<ArticleLike> Likes => _likes.AsReadOnly();
 
+        private readonly List<Comment> _comments = new List<Comment>();
+        public IReadOnlyList<Comment> Comments => _comments.AsReadOnly();
+
         private Article()
         {
         }
@@ -52,6 +55,11 @@ namespace ApplicationCore.Entities.ArticleAggregate
             {
                 _likes.Add(new ArticleLike(this, userId));
             }
+        }
+
+        public void AddComment(string userId, string username, string text)
+        {
+            _comments.Add(new Comment(this, userId, username, text));
         }
     }
 }

@@ -6,10 +6,10 @@
 
 <input asp-for="Id" type="hidden" />
 
-<div class="row">
+<div class="row mb-4">
     <div class="col-md-12">
         <h3>@Model.Title</h3>
-        <p class="article-author">@Model.PublishDate.ToString("MMMM dd, yyyy") by <a href="#">@Model.Author</a></p>
+        <p class="article-author">By <a href="#">@Model.Author</a> on @Model.PublishDate.ToString("MMMM dd, yyyy")</p>
         <p>@Model.Body</p>
         <div class="row">
             <div class="col-sm-1">
@@ -19,13 +19,40 @@
                 </a>
             </div>
             <div class="col-sm-1">
-                <a href="#"><i class="material-icons md-35 md-inactive">question_answer</i></a>
+                <a id="Comment" href="#"><i class="material-icons md-35 md-inactive">question_answer</i></a>
             </div>
         </div>
     </div>
 </div>
-<div>
+
+<div class="comment-row" style="display: none;">
+    <div class="row">
+        <div class="col-12">
+            <div class="input-group mb-3">
+                <textarea id="CommentBody" class="form-control" placeholder="Your comment"></textarea>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-auto mr-auto"></div>
+        <div class="col-auto">
+            <button id="AddComment" type="button" class="btn btn-primary pull-right">Add</button>
+        </div>
+    </div>
+</div>
+
+<div class="mb-4">
     <a asp-action="Articles">Back to articles</a>
+</div>
+
+<div class="card" style="@(Model.Comments.Count < 1 ? "display: none;" : "")">
+    <div class="card-header"><strong>Comments</strong></div>
+    <div class="card-content">
+        @for (int i = 0; i < Model.Comments.Count; i++)
+        {
+            await Html.RenderPartialAsync("_Comment", Model.Comments[i]);
+        }
+    </div>
 </div>
 
 @section Scripts {
@@ -50,6 +77,35 @@
                     }
                 });
             });
+
+            $('#Comment').click(function (e) {
+                e.preventDefault();
+                $('#CommentBody').val('')
+                var icon = $(this).find('i');
+                if (icon.hasClass('md-inactive')) {
+                    icon.removeClass('md-inactive').addClass('md-active');
+                    $('.comment-row').show();
+                } else {
+                    icon.removeClass('md-active').addClass('md-inactive');
+                    $('.comment-row').hide();
+                }
+            });
+
+            $('#AddComment').click(function (e) {
+                e.preventDefault();
+                var commentText = $('#CommentBody').val();
+                if (commentText.trim() !== '') {
+                    var articleId = $('#Id').val();
+
+                    $.post('/News/Comment', { id: articleId, text: commentText }).done(function (commentHtml) {
+                        var icon = $('#Comment > i');
+                        icon.removeClass('md-active').addClass('md-inactive');
+                        $('.comment-row').hide();
+                        $('.card-content').append(commentHtml);
+                        $('.card').show();
+                    });
+                }
+            })
         });
     </script>
 }

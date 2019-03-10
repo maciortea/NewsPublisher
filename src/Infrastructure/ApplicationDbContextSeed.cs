@@ -53,31 +53,23 @@ namespace Infrastructure
         private static async Task EnsureArticlesAsync(ApplicationDbContext db, string authorId)
         {
             await db.Articles.AddAsync(new Article(
-                "What are some reasons programmers quit their high paying jobs?",
-                @"I was getting in excess of $120,000 when i quit my job last May. I was working in San Jose and had an apartment and a sports car.
-                  Though i always knew i will quit, here are reasons which led my quitting materialize:
-                  Monotonous work.
-                  I realized that i am a very small player in a large eco - system of the product = lesser importance.
-                  I was always interested in starting a business.I did an M.S only with the flow.
-                  I quit my job and solo - travelled 10 countries.
-                  I started working in my family business in India since then.",
+                "What is Lorem Ipsum?",
+                "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
                 authorId));
 
             await db.Articles.AddAsync(new Article(
-                "What is the single biggest green flag during a job interview?",
-                @"You’ll sit down in your interview. You’ll be on your best behavior.
-                  He will have your resume in front of him. He will start “sizing you up”. Asking about prior roles, skills, stupid HR questions that are designed to make you squirm. “What was your biggest mistake and how did you fix it?”
-                  (Hint: leave out that first one that comes to mind. That one is typically a bit too raw :P)
-                  He’ll continue with his barrage of questions. Trying to read between the lines on your bullet points.
-                  And then.
-                  Somewhere in the middle of the interview.
-                  The tone will change.
-                  Rather than sizing you up, he will start selling you up on the job.
-                  “This job has great perks….great coworkers….work life balance…”
-                  It is usually a great sign. Don’t act too excited though. Play hard to get a little. Just say, “I have a few interviews to go on this week. I’ve just begun the process of my search.”
-                  Now, before you get too excited if you see this, remember: Interviewing is its own dystopian dating hell of sorts. This “excitement” can happen and you can get ghosted right after that.
-                  The problem is that they are required to interview X number of candidates. And it’s entirely possible another great candidate comes in after that and steals your thunder. And another. And another.
-                  So keep your head up. Just remember: you only have to find one job.",
+                "Why do we use it?",
+                "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+                authorId));
+
+            await db.Articles.AddAsync(new Article(
+                "Where does it come from?",
+                "Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of 'de Finibus Bonorum et Malorum' (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, 'Lorem ipsum dolor sit amet..', comes from a line in section 1.10.32.",
+                authorId));
+
+            await db.Articles.AddAsync(new Article(
+                "Where can I get some?",
+                "There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable. If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text. All the Lorem Ipsum generators on the Internet tend to repeat predefined chunks as necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with a handful of model sentence structures, to generate Lorem Ipsum which looks reasonable. The generated Lorem Ipsum is therefore always free from repetition, injected humour, or non-characteristic words etc.",
                 authorId));
 
             await db.SaveChangesAsync();

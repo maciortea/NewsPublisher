@@ -1,0 +1,6 @@
+﻿@model Web.Models.ArticleComment
+
+<div class="card-body border-bottom">
+    <p class="card-text">@Model.Text</p>
+    <p class="card-text"><small class="text-muted">By <u>@Model.Username</u> on @Model.CreatedOn.ToString("MMMM dd, yyyy")</small></p>
+</div>

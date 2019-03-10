@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Web.Models
 {
@@ -11,5 +12,6 @@ namespace Web.Models
         public string Author { get; set; }
         public bool LikedByMe { get; set; }
         public int LikesCount { get; set; }
+        public List<ArticleComment> Comments { get; set; }
     }
 }
