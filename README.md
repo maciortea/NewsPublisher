@@ -7,4 +7,4 @@ Application comes with a publisher user having following credentials:
 - username: publisher@domain.com
 - password: P@ssword1
 
-Every new registered user will have employee role.
+Every new registered user will be assigned to employee role.
