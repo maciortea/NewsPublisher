@@ -1,4 +1,5 @@
-﻿using ApplicationCore.Entities.ArticleAggregate;
+﻿using ApplicationCore.Common;
+using ApplicationCore.Entities.ArticleAggregate;
 using Microsoft.AspNetCore.Identity;
 using System.Threading.Tasks;
 
@@ -11,11 +12,11 @@ namespace Infrastructure
             string publisherUserId = await EnsureUserAsync(userManager, "publisher@domain.com", "P@ssword1");
             string oneUserId = await EnsureUserAsync(userManager, "one@domain.com", "P@ssword1");
             string anotherUserId = await EnsureUserAsync(userManager, "another@domain.com", "P@ssword1");
-            await EnsureRoleAsync(roleManager, "User");
-            await EnsureRoleAsync(roleManager, "Publisher");
-            await AssignRolesToUserAsync(userManager, oneUserId, "User");
-            await AssignRolesToUserAsync(userManager, anotherUserId, "User");
-            await AssignRolesToUserAsync(userManager, publisherUserId, "Publisher");
+            await EnsureRoleAsync(roleManager, Roles.User);
+            await EnsureRoleAsync(roleManager, Roles.Publisher);
+            await AssignRolesToUserAsync(userManager, oneUserId, Roles.User);
+            await AssignRolesToUserAsync(userManager, anotherUserId, Roles.User);
+            await AssignRolesToUserAsync(userManager, publisherUserId, Roles.Publisher);
             await EnsureArticlesAsync(db, publisherUserId);
         }
 
